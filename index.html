@@ -124,6 +124,9 @@
       overflow: hidden;
       box-shadow: var(--shadow-sm);
       display: flex;
+      width: 100%;
+      /* Menggunakan aspect-ratio agar proporsional di semua layar */
+      aspect-ratio: 10 / 6; 
     }
 
     svg {
@@ -275,24 +278,64 @@
     /* SVG STYLING */
     .grid-line { stroke: #e2e8f0; stroke-width: 2; }
     
-    /* Shape jajar genjang diubah warnanya agar kontras dengan header */
     .body-shape { fill: #ffedd5; stroke: #ea580c; stroke-width: 4; stroke-linejoin: round; }
     .cut-triangle { fill: #fed7aa; stroke: #c2410c; stroke-width: 4; stroke-linejoin: round; }
     
     .height-line { stroke: #ef4444; stroke-width: 3; stroke-dasharray: 8 6; stroke-linecap: round; }
     .measure-line, .measure-tick { stroke: #334155; stroke-width: 2.5; stroke-linecap: round; }
     
-    /* Guide persegi panjang diubah menjadi Biru Transparan */
     .rectangle-guide { fill: rgba(37, 99, 235, 0.05); stroke: #3b82f6; stroke-width: 3; stroke-dasharray: 8 6; opacity: 0; transition: opacity 0.3s ease; }
     
     .measure-text { fill: var(--text-dark); font-size: 26px; font-weight: 800; }
     .note { fill: var(--primary); font-size: 22px; font-weight: 800; text-anchor: middle; }
 
+    /* ========================================= */
+    /* MEDIA QUERIES (RESPONSIVE)       */
+    /* ========================================= */
+
+    /* Tablet & Layar Menengah */
     @media (max-width: 1050px) {
       .content { grid-template-columns: 1fr; }
-      .stage { min-height: 400px; }
-      .sidebar { max-height: none; overflow-y: visible; }
+      /* Menghilangkan min-height agar SVG scaling natural via aspect-ratio */
+      .sidebar { max-height: none; overflow-y: visible; padding-right: 0; }
       .title-wrapper { flex-direction: column; gap: 8px; }
+    }
+
+    /* HP & Layar Kecil */
+    @media (max-width: 600px) {
+      body {
+        padding: 12px; /* Mengurangi padding luar agar konten lebih luas */
+      }
+      .header {
+        padding: 20px 16px;
+      }
+      .header h1 {
+        font-size: 24px;
+        text-align: center;
+      }
+      .header p {
+        font-size: 14px;
+      }
+      .content {
+        padding: 16px;
+        gap: 16px;
+      }
+      .card {
+        padding: 16px;
+      }
+      .formula {
+        font-size: 28px;
+      }
+      .calculation-live {
+        font-size: 18px;
+      }
+      .buttons {
+        flex-direction: column; /* Tumpuk tombol ke bawah di HP */
+        gap: 8px;
+      }
+      button {
+        padding: 16px; /* Perbesar area sentuh tombol */
+      }
     }
   </style>
 </head>
