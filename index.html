@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pembuktian Luas Jajar Genjang - Mathnology</title>
+
+  <style>
+    :root {
+      /* Skema Warna Baru: Ocean Blue & Coral */
+      --primary: #2563eb;       /* Royal Blue */
+      --primary-hover: #1d4ed8; /* Dark Blue */
+      --secondary: #dbeafe;     /* Light Blue */
+      --secondary-hover: #bfdbfe;
+      --accent: #f97316;        /* Coral/Orange */
+      --text-dark: #0f172a;     /* Slate 900 */
+      --text-muted: #475569;    /* Slate 600 */
+      --bg-body: #f1f5f9;       /* Slate 100 */
+      --bg-panel: #ffffff;
+      --border-color: #e2e8f0;
+      --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.08);
+      --shadow-sm: 0 4px 6px rgba(15, 23, 42, 0.05);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg-body);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      color: var(--text-dark);
+    }
+
+    .app {
+      width: 1400px;
+      max-width: 100%;
+      background: var(--bg-panel);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER DENGAN GRADASI BIRU ELEGAN */
+    .header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      text-align: center;
+      padding: 24px 20px;
+    }
+
+    .title-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    /* BADGE MATHNOLOGY */
+    .brand-badge {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-badge::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #fde047;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #fde047;
+    }
+
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 2fr 1.1fr;
+      gap: 24px;
+      padding: 24px;
+      background: #f8fafc;
+    }
+
+    /* KANVAS VISUAL */
+    .stage {
+      background: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* SIDEBAR KONTROL & KETERANGAN */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+      max-height: 650px;
+      padding-right: 8px;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 8px;
+    }
+
+    /* KARTU 1: RUMUS (Tema Oranye Terang) */
+    .formula-box {
+      background: #fff7ed;
+      border: 2px solid #fdba74;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .formula {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--text-dark);
+    }
+
+    .calculation-live {
+      font-size: 20px;
+      color: var(--accent);
+      margin-top: 8px;
+      font-weight: 800;
+      border-top: 1px dashed #fdba74;
+      padding-top: 8px;
+    }
+
+    /* KARTU 2 & 3: SLIDERS */
+    .control-item {
+      margin-bottom: 16px;
+    }
+    .control-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .control-item label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .value-badge {
+      background: var(--secondary);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    input[type="range"]:focus-visible, button:focus-visible {
+      outline: 3px solid #93c5fd;
+      outline-offset: 2px;
+    }
+
+    /* BUTTONS */
+    .buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    button {
+      flex: 1;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    button:active { transform: translateY(0); }
+    .primary { background: var(--primary); color: white; }
+    .primary:hover { background: var(--primary-hover); }
+    .secondary { background: var(--secondary); color: var(--primary); }
+    .secondary:hover { background: var(--secondary-hover); }
+
+    /* KARTU 4: KESIMPULAN */
+    .explanation {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 12px;
+      padding: 16px;
+      line-height: 1.6;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .status {
+      margin-top: 12px;
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    /* SVG STYLING */
+    .grid-line { stroke: #e2e8f0; stroke-width: 2; }
+    
+    /* Shape jajar genjang diubah warnanya agar kontras dengan header */
+    .body-shape { fill: #ffedd5; stroke: #ea580c; stroke-width: 4; stroke-linejoin: round; }
+    .cut-triangle { fill: #fed7aa; stroke: #c2410c; stroke-width: 4; stroke-linejoin: round; }
+    
+    .height-line { stroke: #ef4444; stroke-width: 3; stroke-dasharray: 8 6; stroke-linecap: round; }
+    .measure-line, .measure-tick { stroke: #334155; stroke-width: 2.5; stroke-linecap: round; }
+    
+    /* Guide persegi panjang diubah menjadi Biru Transparan */
+    .rectangle-guide { fill: rgba(37, 99, 235, 0.05); stroke: #3b82f6; stroke-width: 3; stroke-dasharray: 8 6; opacity: 0; transition: opacity 0.3s ease; }
+    
+    .measure-text { fill: var(--text-dark); font-size: 26px; font-weight: 800; }
+    .note { fill: var(--primary); font-size: 22px; font-weight: 800; text-anchor: middle; }
+
+    @media (max-width: 1050px) {
+      .content { grid-template-columns: 1fr; }
+      .stage { min-height: 400px; }
+      .sidebar { max-height: none; overflow-y: visible; }
+      .title-wrapper { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="title-wrapper">
+        <h1>Pembuktian Luas Jajar Genjang</h1>
+        <div class="brand-badge">By Mathnology</div>
+      </div>
+      <p>Amati visual di kiri dan atur parameternya melalui panel di kanan.</p>
+    </header>
+
+    <section class="content">
+      <div class="stage">
+        <svg id="svg" viewBox="0 0 1000 600" aria-label="Visualisasi interaktif jajar genjang">
+          <g id="grid"></g>
+          <rect id="rectangleGuide" class="rectangle-guide" />
+          <polygon id="bodyShape" class="body-shape"></polygon>
+          <polygon id="cutTriangle" class="cut-triangle"></polygon>
+          
+          <line id="heightLine" class="height-line" />
+          <path id="rightAngle" fill="none" stroke="#ef4444" stroke-width="2.5" />
+          
+          <line id="baseLine" class="measure-line" />
+          <line id="baseTickLeft" class="measure-tick" />
+          <line id="baseTickRight" class="measure-tick" />
+          
+          <line id="heightMeasureLine" class="measure-line" />
+          <line id="heightTickTop" class="measure-tick" />
+          <line id="heightTickBottom" class="measure-tick" />
+          
+          <text id="baseText" class="measure-text">a</text>
+          <text id="heightText" class="measure-text">t</text>
+          
+          <text id="noteText" class="note" x="500" y="60"></text>
+        </svg>
+      </div>
+
+      <aside class="sidebar">
+        
+        <div class="card">
+          <div class="card-title">Perhitungan Real-time</div>
+          <div class="formula-box">
+            <div class="formula">L = a × t</div>
+            <div class="calculation-live" id="calculationDisplay">L = 10 × 5 = 50</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Atur Dimensi</div>
+          <div class="control-item">
+            <label for="baseSlider"><span>Panjang Alas (a)</span> <span class="value-badge" id="valBase">10</span></label>
+            <input id="baseSlider" type="range" min="6" max="12" value="10" />
+          </div>
+          <div class="control-item">
+            <label for="heightSlider"><span>Tinggi (t)</span> <span class="value-badge" id="valHeight">5</span></label>
+            <input id="heightSlider" type="range" min="3" max="8" value="5" />
+          </div>
+          <div class="control-item">
+            <label for="slantSlider"><span>Kemiringan Sisi</span> <span class="value-badge" id="valSlant">2</span></label>
+            <input id="slantSlider" type="range" min="1" max="4" value="2" />
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Animasi Pembuktian</div>
+          <div class="control-item">
+            <label for="cutSlider"><span>Geser Potongan Segitiga</span> <span class="value-badge" style="background:#dbeafe;color:#1d4ed8">Geser ⭢</span></label>
+            <input id="cutSlider" type="range" min="0" max="100" value="0" />
+          </div>
+          <div class="buttons">
+            <button class="primary" id="btnStart">Mulai Animasi</button>
+            <button class="secondary" id="btnReset">Reset Bentuk</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Penjelasan</div>
+          <div class="explanation" id="explanation" aria-live="polite"></div>
+          <div id="status" class="status" aria-live="polite"></div>
+        </div>
+
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const CONFIG = {
+        scale: 48,
+        startX: 144, 
+        baseY: 480,  
+        animDuration: 1300
+      };
+
+      const elements = {
+        grid: document.getElementById("grid"),
+        bodyShape: document.getElementById("bodyShape"),
+        cutTriangle: document.getElementById("cutTriangle"),
+        rectangleGuide: document.getElementById("rectangleGuide"),
+        heightLine: document.getElementById("heightLine"),
+        rightAngle: document.getElementById("rightAngle"),
+        baseLine: document.getElementById("baseLine"),
+        baseTickLeft: document.getElementById("baseTickLeft"),
+        baseTickRight: document.getElementById("baseTickRight"),
+        heightMeasureLine: document.getElementById("heightMeasureLine"),
+        heightTickTop: document.getElementById("heightTickTop"),
+        heightTickBottom: document.getElementById("heightTickBottom"),
+        baseText: document.getElementById("baseText"),
+        heightText: document.getElementById("heightText"),
+        noteText: document.getElementById("noteText"),
+        baseSlider: document.getElementById("baseSlider"),
+        heightSlider: document.getElementById("heightSlider"),
+        slantSlider: document.getElementById("slantSlider"),
+        cutSlider: document.getElementById("cutSlider"),
+        valBase: document.getElementById("valBase"),
+        valHeight: document.getElementById("valHeight"),
+        valSlant: document.getElementById("valSlant"),
+        explanation: document.getElementById("explanation"),
+        statusBox: document.getElementById("status"),
+        btnStart: document.getElementById("btnStart"),
+        btnReset: document.getElementById("btnReset"),
+        calculationDisplay: document.getElementById("calculationDisplay")
+      };
+
+      let animationId = null;
+
+      const toPoints = (points) => points.map(p => `${p.x},${p.y}`).join(" ");
+      const setLine = (line, x1, y1, x2, y2) => {
+        line.setAttribute("x1", x1);
+        line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+      };
+      const easeInOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+      const renderGrid = () => {
+        elements.grid.innerHTML = "";
+        const svgNS = "http://www.w3.org/2000/svg";
+
+        for (let x = 0; x <= 1000; x += CONFIG.scale) {
+          const line = document.createElementNS(svgNS, "line");
+          setLine(line, x, 0, x, 600);
+          line.setAttribute("class", "grid-line");
+          elements.grid.appendChild(line);
+        }
+
+        for (let y = 0; y <= 600; y += CONFIG.scale) {
+          const line = document.createElementNS(svgNS, "line");
+          setLine(line, 0, y, 1000, y);
+          line.setAttribute("class", "grid-line");
+          elements.grid.appendChild(line);
+        }
+      };
+
+      const updateApp = () => {
+        const rawBase = Number(elements.baseSlider.value);
+        const rawHeight = Number(elements.heightSlider.value);
+        const rawSlant = Number(elements.slantSlider.value);
+        
+        elements.valBase.textContent = rawBase;
+        elements.valHeight.textContent = rawHeight;
+        elements.valSlant.textContent = rawSlant;
+
+        const baseLength = rawBase * CONFIG.scale;
+        const heightLength = rawHeight * CONFIG.scale;
+        const slantLength = rawSlant * CONFIG.scale;
+        const progress = Number(elements.cutSlider.value) / 100;
+
+        const D = { x: CONFIG.startX, y: CONFIG.baseY };
+        const A = { x: CONFIG.startX + slantLength, y: CONFIG.baseY - heightLength };
+        const F = { x: A.x, y: CONFIG.baseY };
+        const B = { x: CONFIG.startX + baseLength, y: CONFIG.baseY };
+        const C = { x: B.x + slantLength, y: A.y };
+
+        const moveX = progress * baseLength;
+        const cutD = { x: D.x + moveX, y: D.y };
+        const cutA = { x: A.x + moveX, y: A.y };
+        const cutF = { x: F.x + moveX, y: F.y };
+
+        elements.bodyShape.setAttribute("points", toPoints([F, A, C, B]));
+        elements.cutTriangle.setAttribute("points", toPoints([cutD, cutA, cutF]));
+
+        elements.rectangleGuide.setAttribute("x", F.x);
+        elements.rectangleGuide.setAttribute("y", A.y);
+        elements.rectangleGuide.setAttribute("width", baseLength);
+        elements.rectangleGuide.setAttribute("height", heightLength);
+        elements.rectangleGuide.style.opacity = progress > 0.15 ? 1 : 0;
+
+        setLine(elements.heightLine, A.x, A.y, F.x, F.y);
+        elements.rightAngle.setAttribute("d", `M ${F.x} ${F.y - 20} L ${F.x + 20} ${F.y - 20} L ${F.x + 20} ${F.y}`);
+
+        const measureProgress = easeInOut(progress);
+        const baseMeasureX1 = D.x + slantLength * measureProgress;
+        const baseMeasureX2 = baseMeasureX1 + baseLength;
+        const baseMeasureY = CONFIG.baseY + 50;
+
+        setLine(elements.baseLine, baseMeasureX1, baseMeasureY, baseMeasureX2, baseMeasureY);
+        setLine(elements.baseTickLeft, baseMeasureX1, baseMeasureY - 10, baseMeasureX1, baseMeasureY + 10);
+        setLine(elements.baseTickRight, baseMeasureX2, baseMeasureY - 10, baseMeasureX2, baseMeasureY + 10);
+
+        const heightMeasureX = A.x - 50;
+        setLine(elements.heightMeasureLine, heightMeasureX, A.y, heightMeasureX, CONFIG.baseY);
+        setLine(elements.heightTickTop, heightMeasureX - 10, A.y, heightMeasureX + 10, A.y);
+        setLine(elements.heightTickBottom, heightMeasureX - 10, CONFIG.baseY, heightMeasureX + 10, CONFIG.baseY);
+
+        elements.baseText.setAttribute("x", baseMeasureX1 + baseLength / 2 - 35);
+        elements.baseText.setAttribute("y", baseMeasureY + 40);
+        elements.baseText.textContent = `a = ${rawBase}`;
+        
+        elements.heightText.setAttribute("x", heightMeasureX - 85);
+        elements.heightText.setAttribute("y", A.y + heightLength / 2 + 8);
+        elements.heightText.textContent = `t = ${rawHeight}`;
+
+        const totalArea = rawBase * rawHeight;
+        elements.calculationDisplay.innerHTML = `L = ${rawBase} × ${rawHeight} = <b>${totalArea}</b>`;
+
+        updateUIState(progress, rawBase, rawHeight, totalArea);
+      };
+
+      const updateUIState = (progress, a, t, area) => {
+        if (progress < 0.05) {
+          elements.noteText.textContent = "Bentuk Awal: Jajar Genjang";
+          elements.explanation.innerHTML = `Jajar genjang memiliki panjang alas <b>a = ${a}</b> dan tinggi <b>t = ${t}</b>.`;
+          
+          elements.statusBox.textContent = "Mode Observasi";
+          elements.statusBox.style.background = "#e0e7ff";
+          elements.statusBox.style.color = "#1e3a8a";
+        } else if (progress < 0.95) {
+          elements.noteText.textContent = "Memindahkan Area Segitiga...";
+          elements.explanation.innerHTML = `Segitiga dipindahkan ke sisi kanan. Luas daerah total tidak berubah, tetap sebesar <b>${area}</b>.`;
+          
+          elements.statusBox.textContent = "Proses Pembuktian...";
+          elements.statusBox.style.background = "#ffedd5";
+          elements.statusBox.style.color = "#9a3412";
+        } else {
+          elements.noteText.textContent = "Terbentuk Persegi Panjang Sempurna!";
+          elements.explanation.innerHTML = `Jajar genjang berubah menjadi persegi panjang. Terbukti Luas = ${a} × ${t} = <b>${area}</b>.`;
+          
+          elements.statusBox.textContent = `Terbukti: Luas = ${area}`;
+          elements.statusBox.style.background = "#dcfce7";
+          elements.statusBox.style.color = "#166534";
+        }
+      };
+
+      const startProofAnimation = () => {
+        cancelAnimationFrame(animationId);
+        const start = Number(elements.cutSlider.value);
+        const end = 100;
+        let startTime = null;
+
+        const animate = (time) => {
+          if (!startTime) startTime = time;
+          const rawProgress = Math.min((time - startTime) / CONFIG.animDuration, 1);
+          const smoothProgress = easeInOut(rawProgress);
+
+          elements.cutSlider.value = start + (end - start) * smoothProgress;
+          updateApp();
+
+          if (rawProgress < 1) {
+            animationId = requestAnimationFrame(animate);
+          }
+        };
+        animationId = requestAnimationFrame(animate);
+      };
+
+      const resetProof = () => {
+        cancelAnimationFrame(animationId);
+        elements.baseSlider.value = 10;
+        elements.heightSlider.value = 5;
+        elements.slantSlider.value = 2;
+        elements.cutSlider.value = 0;
+        updateApp();
+      };
+
+      const resetCutOnly = () => {
+        elements.cutSlider.value = 0;
+        updateApp();
+      };
+
+      elements.baseSlider.addEventListener("input", resetCutOnly);
+      elements.heightSlider.addEventListener("input", resetCutOnly);
+      elements.slantSlider.addEventListener("input", resetCutOnly);
+      elements.cutSlider.addEventListener("input", () => {
+        cancelAnimationFrame(animationId);
+        updateApp();
+      });
+
+      elements.btnStart.addEventListener("click", startProofAnimation);
+      elements.btnReset.addEventListener("click", resetProof);
+
+      renderGrid();
+      updateApp();
+    });
+  </script>
+</body>
+</html>
